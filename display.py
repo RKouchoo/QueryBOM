@@ -15,13 +15,16 @@ imageTopography = loadImage("IDR033_map\\IDR033_topography.png")
 
 imageWeather = loadImage("IDR033_latestweather\\weather1.png")
 
+images = [imageBackground, imageTopography, imageRange, imageWeather, imageLocations]
 
-comp = ImageTk.PhotoImage(Image.alpha_composite(imageBackground, imageTopography))
-comp = Image.alpha_composite(comp, ImageTk.PhotoImage(imageRange))
-comp = Image.alpha_composite(comp, ImageTk.PhotoImage(imageWeather))
-comp = Image.alpha_composite(comp, ImageTk.PhotoImage(imageLocations))
+composite = Image.new("RGBA", (512, 512))
 
-panel1 = Label(root, image=comp)
-panel1.grid(row=0, column=0, sticky=E)
+for im in images:
+	composite = Image.alpha_composite(composite, im)
+
+convertedComposite = ImageTk.PhotoImage(composite)
+
+panel = Label(root, image=convertedComposite)
+panel.grid(row=0, column=0, sticky=E)
 
 root.mainloop()  # Start the GUI
