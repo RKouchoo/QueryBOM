@@ -1,16 +1,27 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from os import path
+import os
 
 root = Tk()  # A root window for displaying objects
+
+def loadImage(path):
+	return Image.open(os.getcwd() + "\\" + path).convert("RGBA")
+
 # open image
-imageHead = Image.open(path.relpath('IDR033_map/IDR033_backround.png'))
-imageHand = Image.open(path.relpath('IDR033_weather/weather1.png'))
+imageBackground = loadImage("IDR033_map\\IDR033_background.png")
+imageLocations = loadImage("IDR033_map\\IDR033_locations.png")
+imageRange = loadImage("IDR033_map\\IDR033_range.png")
+imageTopography = loadImage("IDR033_map\\IDR033_topography.png")
 
-imageHead.paste(imageHand, (512, 512), imageHand)
-# Convert the Image object into a TkPhoto object
-tkimage = ImageTk.PhotoImage(imageHead)
+imageWeather = loadImage("IDR033_latestweather\\weather1.png")
 
-panel1 = Label(root, image=tkimage)
-panel1.grid(row=0, column=2, sticky=E)
+
+comp = ImageTk.PhotoImage(Image.alpha_composite(imageBackground, imageTopography))
+comp = Image.alpha_composite(comp, ImageTk.PhotoImage(imageRange))
+comp = Image.alpha_composite(comp, ImageTk.PhotoImage(imageWeather))
+comp = Image.alpha_composite(comp, ImageTk.PhotoImage(imageLocations))
+
+panel1 = Label(root, image=comp)
+panel1.grid(row=0, column=0, sticky=E)
+
 root.mainloop()  # Start the GUI
