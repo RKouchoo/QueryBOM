@@ -9,3 +9,7 @@
 - bs4
 - tkinter
 - requests
+- selenium
+- selenium chromedriver
+- time
+- pillow
