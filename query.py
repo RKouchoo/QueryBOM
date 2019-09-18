@@ -10,16 +10,12 @@ import time
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--headless')
+#options.add_argument('--proxy-server="https://proxy.tafensw.edu.au"') # this doesnt seem to work on tafe/uni wifi. Not sure why
 
 driver = webdriver.Chrome(chrome_options=options)
 
 woolongongURL = "http://www.bom.gov.au/products/IDR033.loop.shtml"
 terryHillsURL = "http://www.bom.gov.au/products/IDR714.loop.shtml"
-
-# only used for testing since the network im on uses a proxy
-proxyDict = {
-  'https' : 'https://proxy.tafensw.edu.au:8080',
-}
 
 snapshots = []
 
@@ -32,7 +28,7 @@ x = 0 # dont need x but whatever
 for x in range(0, 5):
 	snapshots.append(driver.page_source)
 	print("Taken snapshot: {}".format(x))
-	time.sleep(0.33)
+	time.sleep(0.333)
 
 driver.close()
 
@@ -49,6 +45,13 @@ for i in range(0, 5):
 
 	for image in img:
 		imgs = image.get("src")
-		if "IDR033" in imgs:
-			print(imgs)
+		
+		if "IDR033" in imgs: # woolongong loop
+			print("Found:" + imgs)
 			imgURLS.append(imgs)
+
+		elif "IDR714" in imgs: # terry hills loop
+			print("Found:" + imgs)
+			imgURLS.append(imgs)
+
+
