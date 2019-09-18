@@ -8,3 +8,4 @@
 ## Requirements
 - bs4
 - tkinter
+- requests
