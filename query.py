@@ -2,17 +2,23 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import requests
 import time
+import os
 import wget
+from PIL import Image
 
-import display # local class
+#import display # local class
+
+downloadPath = os.getcwd() + "\\IDR033_latestweather\\"
 
 hostname = "proxy.tafensw.edu.au"
 port = "8080"
+downloadPreferences = {"download.default_directory": downloadPath, "directory_upgrade": True}
 
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--headless')
-options.add_argument('--proxy-server=%s' % hostname + ":" + port) # this doesnt seem to work sometimes on tafe/uni wifi
+#options.add_argument('--proxy-server=%s' % hostname + ":" + port) # this doesnt seem to work sometimes on tafe/uni wifi
+options.add_experimental_option("prefs", downloadPreferences)
 
 driver = webdriver.Chrome(chrome_options=options)
 
@@ -33,8 +39,6 @@ for x in range(0, 5):
 	print("Taken snapshot: {}".format(x))
 	time.sleep(0.333)
 
-driver.close()
-
 # run through all of the snapshots and get the loop images.
 imgURLS = []
 
@@ -53,3 +57,23 @@ for i in range(0, 5):
 		elif "IDR714" in imgs: # terry hills loop
 			print("Found:" + imgs)
 			imgURLS.append(imgs)
+
+# download the images
+
+for img in imgURLS:
+	driver.get(img)
+	driver.save_screenshot("temp.png")
+
+	im = Image.open("temp.png")
+	width, height = im.size   # Get dimensions
+
+	left = (width - 512) / 2
+	top = (height - 512) / 2
+	right = (width + 512) / 2
+	bottom = (height + 512) / 2
+
+	# Crop the center of the image
+	im = im.crop((left, top, right, bottom))
+	im.save(downloadPath + "\\{}.png".format(img[28:]))
+
+driver.close()
