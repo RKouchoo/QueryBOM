@@ -17,7 +17,7 @@ downloadPreferences = {"download.default_directory": downloadPath, "directory_up
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
 options.add_argument('--headless')
-#options.add_argument('--proxy-server=%s' % hostname + ":" + port) # this doesnt seem to work sometimes on tafe/uni wifi
+options.add_argument('--proxy-server=%s' % hostname + ":" + port) # this doesnt seem to work sometimes on tafe/uni wifi
 options.add_experimental_option("prefs", downloadPreferences)
 
 driver = webdriver.Chrome(chrome_options=options)
@@ -58,7 +58,7 @@ for i in range(0, 5):
 			print("Found:" + imgs)
 			imgURLS.append(imgs)
 
-# download the images
+# download and crop the images
 
 for img in imgURLS:
 	driver.get(img)
@@ -74,6 +74,6 @@ for img in imgURLS:
 
 	# Crop the center of the image
 	im = im.crop((left, top, right, bottom))
-	im.save(downloadPath + "\\{}.png".format(img[28:]))
+	im.save(downloadPath + "\\{}".format(img[28:]))
 
 driver.close()
